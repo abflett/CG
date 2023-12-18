@@ -46,6 +46,8 @@ class Player
     {
         Site closestSite = FindClosestViableSiteToQueen(queen, gameSites.Sites);
 
+        // need to add gold mines for Wood1
+
         if (closestSite == null)
         {
             QueenAction = "WAIT"; // todo: move to start location
