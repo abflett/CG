@@ -1,5 +1,4 @@
 ﻿using System;
-
 public static class Util
 {
     public static int GetNumericValue()
