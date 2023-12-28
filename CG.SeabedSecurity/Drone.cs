@@ -34,12 +34,15 @@ public class Drone
             Console.WriteLine($"MOVE {closestCreature.Nx} {closestCreature.Ny} 1");
             Console.Error.WriteLine($"Target: {closestCreature.Id}, Far: {distance}");
         }
+        else if (closestCreature.X == 0)
+        {
+            Console.WriteLine($"MOVE {5000} {5000} 1");
+            Console.Error.WriteLine($"No Valid Target: {distance}");
+        }
         else
         {
             Console.WriteLine($"MOVE {closestCreature.Nx} {closestCreature.Ny} 0");
             Console.Error.WriteLine($"Target: {closestCreature.Id}, Too Far: {distance}");
         }
-
-        //Console.WriteLine($"MOVE {closestCreature.Nx} {closestCreature.Ny} 1");  // MOVE <x> <y> <light (1|0)> | WAIT <light (1|0)>
     }
 }

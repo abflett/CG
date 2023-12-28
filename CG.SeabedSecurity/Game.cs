@@ -16,22 +16,14 @@
             _player.UpdateScore();
             _enemy.UpdateScore();
 
-            _player.UpsertScannedCreatures(_gameCreatures);
+            _player.UpsertScannedCreatures(_gameCreatures); // Only on surface
             _enemy.UpsertScannedCreatures(_gameCreatures);
 
-            _player.UpsertDrones();
+            _player.UpsertDrones(); // drone information
             _enemy.UpsertDrones();
 
-            // Todo: find out what this does.
-            int droneScanCount = Util.GetNumericValue();
-            for (int i = 0; i < droneScanCount; i++)
-            {
-                var data = Util.GetNumericValues();
-                int droneId = data[0];
-                int creatureId = data[1];
-            }
-
-            _gameCreatures.UpdateVisibleCreatures();
+            _player.UpsertDroneScannedCreatures(_gameCreatures); // drone scanned but not scanned data
+            _gameCreatures.UpdateVisibleCreatures(); // Only in light range, powered vs not
             _gameCreatures.UpdateRadarInfo();
             _player.Update();
         }
