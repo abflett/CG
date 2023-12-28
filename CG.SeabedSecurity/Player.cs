@@ -11,6 +11,7 @@ public class Player
 
     public void UpdateScannedCreature(Creature creature)
     {
+        creature.PlayerScanned = true;
         var foundCreature = ScannedCreatures.Find(x => x.Id == creature.Id);
         if (foundCreature == null)
         {
