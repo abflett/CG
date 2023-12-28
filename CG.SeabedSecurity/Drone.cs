@@ -79,6 +79,8 @@ public class Drone
     {
         int maxCount = Math.Max(tlCount, Math.Max(trCount, Math.Max(blCount, brCount)));
 
+        // fix random movement
+
         if (maxCount == tlCount) return "TL";
         if (maxCount == trCount) return "TR";
         if (maxCount == blCount) return "BL";
