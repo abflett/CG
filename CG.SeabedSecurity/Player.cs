@@ -2,14 +2,26 @@
 using System.Collections.Generic;
 public class Player
 {
+    private int _droneCount = 0;
     public int Score { get; set; } = 0;
-    public int DroneCount { get; set; } = 0;
-    public int ScanCount { get; set; } = 0;
-    public int RadarBlipCount { get; set; } = 0;
     public List<Drone> Drones { get; set; } = new List<Drone>();
     public List<Creature> ScannedCreatures { get; set; } = new List<Creature>();
 
-    public void UpdateScannedCreature(Creature creature)
+    public void UpdateScore()
+    {
+        Score = Util.GetNumericValue();
+    }
+
+    public void UpsertScannedCreatures(GameCreatures gameCreatures)
+    {
+        var scanCount = Util.GetNumericValue();
+        for (int i = 0; i < scanCount; i++)
+        {
+            UpdateScannedCreature(gameCreatures.CreatureById(Util.GetNumericValue()));
+        }
+    }
+
+    private void UpdateScannedCreature(Creature creature)
     {
         var foundCreature = ScannedCreatures.Find(x => x.Id == creature.Id);
         if (foundCreature == null)
@@ -18,44 +30,55 @@ public class Player
         }
     }
 
-    public void UpdateDrones(int id, int x, int y, int emergency, int battery)
+    public void UpsertDrones()
     {
-        var drone = Drones.Find(x => x.Id == id);
-        if (drone == null)
+        _droneCount = Util.GetNumericValue();
+        for (int i = 0; i < _droneCount; i++)
         {
-            Drones.Add(new Drone
+            var data = Util.GetNumericValues();
+            var drone = Drones.Find(x => x.Id == data[0]);
+            if (drone == null)
             {
-                Id = id,
-                X = x,
-                Y = y,
-                Emergency = emergency,
-                Battery = battery
-            });
-        }
-        else
-        {
-            drone.X = x;
-            drone.Y = y;
-            drone.Emergency = emergency;
-            drone.Battery = battery;
+                Drones.Add(new Drone
+                {
+                    Id = data[0],
+                    X = data[1],
+                    Y = data[2],
+                    Emergency = data[3],
+                    Battery = data[4]
+                });
+            }
+            else
+            {
+                drone.X = data[1];
+                drone.Y = data[2];
+                drone.Emergency = data[3];
+                drone.Battery = data[4];
+            }
         }
     }
 
-    public void UpdateDroneRadar(string[] data)
+    public void UpdateDroneRadar()
     {
-        var foundDrone = Drones.Find(x => x.Id == int.Parse(data[0]));
-        if (foundDrone != null)
+        var radarBlipCount = Util.GetNumericValue();
+        for (int i = 0; i < radarBlipCount; i++)
         {
-            foundDrone.Radar.CreatureId = int.Parse(data[1]);
-            foundDrone.Radar.RelativePosition = data[2];
+            var data = (Console.ReadLine().Split(' '));
+
+            // Todo: Many radar blips for each creature, probably used in higher tiers.
+            var foundDrone = Drones.Find(x => x.Id == int.Parse(data[0]));
+            if (foundDrone != null)
+            {
+                foundDrone.Radar.CreatureId = int.Parse(data[1]);
+                foundDrone.Radar.RelativePosition = data[2];
+            }
         }
     }
 
     public void Update(GameCreatures gameCreatures)
     {
-        for (int i = 0; i < DroneCount; i++)
+        for (int i = 0; i < _droneCount; i++)
         {
-            Console.Error.WriteLine($"Drone{i}/{DroneCount} Action.");
             Drones[i].Action();
         }
     }

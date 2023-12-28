@@ -8,7 +8,7 @@ public class Drone
     public int Y { get; set; }
     public int Emergency { get; set; }
     public int Battery { get; set; }
-    public Radar Radar { get; set; } = new();
+    public Radar Radar { get; set; } = new(); // Todo: fix this
     public List<Creature> ScannedCreatures { get; set; } = new();
 
     public void Action()

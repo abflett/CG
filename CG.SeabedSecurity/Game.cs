@@ -1,55 +1,27 @@
-﻿using System;
-public class Game
+﻿public class Game
 {
     private int[] _inputs;
-    public GameCreatures GameCreatures;
-    public Player Player { get; set; } = new();
-    public Player Enemy { get; set; } = new();
+    private readonly GameCreatures _gameCreatures;
+    private readonly Player _player = new();
+    private readonly Player _enemy = new();
 
     public Game()
     {
-        GameCreatures = new GameCreatures(Util.GetNumericValue());
-        for (int i = 0; i < GameCreatures.CreatureCount; i++)
-        {
-            _inputs = Util.GetNumericValues();
-            GameCreatures.Add(_inputs[0], _inputs[1], _inputs[2]);
-        }
+        _gameCreatures = new GameCreatures(); // add creatures: id, color, and type
     }
 
     public void Run()
     {
         while (true)
         {
-            Player.Score = Util.GetNumericValue();
-            Enemy.Score = Util.GetNumericValue();
+            _player.UpdateScore();
+            _enemy.UpdateScore();
+            _player.UpsertScannedCreatures(_gameCreatures); // add scanned creatures
+            _enemy.UpsertScannedCreatures(_gameCreatures);
+            _player.UpsertDrones(); // add or update drones: id, x, y, emergency, and battery
+            _enemy.UpsertDrones();
 
-            Player.ScanCount = Util.GetNumericValue();
-            for (int i = 0; i < Player.ScanCount; i++)
-            {
-                Player.UpdateScannedCreature(GameCreatures.CreatureById(Util.GetNumericValue()));
-            }
-
-            Enemy.ScanCount = Util.GetNumericValue();
-            for (int i = 0; i < Enemy.ScanCount; i++)
-            {
-                Enemy.UpdateScannedCreature(GameCreatures.CreatureById(Util.GetNumericValue()));
-            }
-
-            Player.DroneCount = Util.GetNumericValue();
-            for (int i = 0; i < Player.DroneCount; i++)
-            {
-                _inputs = Util.GetNumericValues();
-                Player.UpdateDrones(_inputs[0], _inputs[1], _inputs[2], _inputs[3], _inputs[4]);
-            }
-
-            Enemy.DroneCount = Util.GetNumericValue();
-            for (int i = 0; i < Enemy.DroneCount; i++)
-            {
-                _inputs = Util.GetNumericValues();
-                Enemy.UpdateDrones(_inputs[0], _inputs[1], _inputs[2], _inputs[3], _inputs[4]);
-            }
-
-            int droneScanCount = Util.GetNumericValue();
+            int droneScanCount = Util.GetNumericValue(); // Todo: find out what this does.
             for (int i = 0; i < droneScanCount; i++)
             {
                 _inputs = Util.GetNumericValues();
@@ -57,20 +29,9 @@ public class Game
                 int creatureId = _inputs[1];
             }
 
-            GameCreatures.VisibleCreatureCount = Util.GetNumericValue();
-            for (int i = 0; i < GameCreatures.VisibleCreatureCount; i++)
-            {
-                _inputs = Util.GetNumericValues();
-                GameCreatures.UpdateLocVel(_inputs[0], _inputs[1], _inputs[2], _inputs[3], _inputs[4]);
-            }
-
-            Player.RadarBlipCount = Util.GetNumericValue();
-            for (int i = 0; i < Player.RadarBlipCount; i++)
-            {
-                Player.UpdateDroneRadar(Console.ReadLine().Split(' '));
-            }
-
-            Player.Update(GameCreatures);
+            _gameCreatures.UpdateVisibleCreatures(); // update creatures x, y, vx, and vy
+            _player.UpdateDroneRadar();
+            _player.Update(_gameCreatures);
         }
     }
 }

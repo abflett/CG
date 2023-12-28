@@ -14,7 +14,7 @@
         Radar = radar;
     }
 
-    public void UpdateLocVel(int x, int y, int vx, int vy)
+    public void UpdateCreature(int x, int y, int vx, int vy)
     {
         X = x;
         Y = y;
