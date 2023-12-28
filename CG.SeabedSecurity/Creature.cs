@@ -1,24 +1,24 @@
 ﻿public class Creature
 {
-    public int Id { get; set; }
-    public int Color { get; set; }
-    public int CreatureType { get; set; }
-    public string Radar { get; set; }
-    public int X { get; set; }
-    public int Y { get; set; }
-    public int Vx { get; set; }
-    public int Vy { get; set; }
+    public int Id { get; set; } = 0;
+    public int Color { get; set; } = 0;
+    public int CreatureType { get; set; } = 0;
+    public int X { get; set; } = 0; // Actual
+    public int Y { get; set; } = 0;
+    public int Vx { get; set; } = 0; // Velocity
+    public int Vy { get; set; } = 0;
 
-    public void UpdateRadar(string radar)
-    {
-        Radar = radar;
-    }
+    public int Nx { get; set; } = 0; // Next
+    public int Ny { get; set; } = 0;
 
-    public void UpdateLocVel(int x, int y, int vx, int vy)
+    public void UpdateCreature(int x, int y, int vx, int vy)
     {
         X = x;
         Y = y;
         Vx = vx;
         Vy = vy;
+
+        Nx = X + Vx;
+        Ny = Y + Vy;
     }
 }

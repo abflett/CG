@@ -1,62 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-public class Player
+using System.Linq;
+public class Player : Character
 {
-    public int Score { get; set; } = 0;
-    public int DroneCount { get; set; } = 0;
-    public int ScanCount { get; set; } = 0;
-    public int RadarBlipCount { get; set; } = 0;
-    public List<Drone> Drones { get; set; } = new List<Drone>();
-    public List<Creature> ScannedCreatures { get; set; } = new List<Creature>();
+    public List<Creature> AvailableCreatures { get; set; } = new List<Creature>();
+    public List<Creature> DroneScannedCreatures { get; set; } = new List<Creature>();
 
-    public void UpdateScannedCreature(Creature creature)
+    public void UpsertDroneScannedCreatures(GameCreatures gameCreatures)
     {
-        var foundCreature = ScannedCreatures.Find(x => x.Id == creature.Id);
-        if (foundCreature == null)
+        int droneScanCount = Util.GetNumericValue();
+        for (int i = 0; i < droneScanCount; i++)
         {
-            ScannedCreatures.Add(creature);
-        }
-    }
-
-    public void UpdateDrones(int id, int x, int y, int emergency, int battery)
-    {
-        var drone = Drones.Find(x => x.Id == id);
-        if (drone == null)
-        {
-            Drones.Add(new Drone
+            var data = Util.GetNumericValues();
+            var playerDrone = Drones.FirstOrDefault(x => x.Id == data[0]);
+            if (playerDrone != null)
             {
-                Id = id,
-                X = x,
-                Y = y,
-                Emergency = emergency,
-                Battery = battery
-            });
-        }
-        else
-        {
-            drone.X = x;
-            drone.Y = y;
-            drone.Emergency = emergency;
-            drone.Battery = battery;
+                var foundCreature = gameCreatures.CreatureById(data[1]);
+                var foundDroneScannedCreature = DroneScannedCreatures.Find(x => x.Id == foundCreature.Id);
+
+                if (foundDroneScannedCreature == null)
+                {
+                    DroneScannedCreatures.Add(foundCreature);
+                    AvailableCreatures.Remove(foundCreature);
+                }
+            }
         }
     }
 
-    public void UpdateDroneRadar(string[] data)
+    public void UpdateRadarInfo()
     {
-        var foundDrone = Drones.Find(x => x.Id == int.Parse(data[0]));
-        if (foundDrone != null)
+        var radarBlipCount = Util.GetNumericValue();
+        for (int i = 0; i < radarBlipCount; i++)
         {
-            foundDrone.Radar.CreatureId = int.Parse(data[1]);
-            foundDrone.Radar.RelativePosition = data[2];
+            var data = (Console.ReadLine().Split(' '));
+            var playerDrone = Drones.FirstOrDefault(x => x.Id == int.Parse(data[0]));
+            if (playerDrone != null)
+            {
+                playerDrone.UpsertRadar(int.Parse(data[0]), int.Parse(data[1]), data[2]);
+            }
         }
     }
 
-    public void Update(GameCreatures gameCreatures)
+    public void Update()
     {
-        for (int i = 0; i < DroneCount; i++)
+        for (int i = 0; i < _droneCount; i++)
         {
-            Console.Error.WriteLine($"Drone{i}/{DroneCount} Action.");
-            Drones[i].Action();
+            Drones[i].Action(AvailableCreatures);
         }
     }
 }

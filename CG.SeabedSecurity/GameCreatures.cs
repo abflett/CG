@@ -3,34 +3,28 @@
 public class GameCreatures
 {
     public List<Creature> Creatures { get; set; } = new List<Creature>();
-    public int CreatureCount { get; set; } = 0;
-    public int VisibleCreatureCount { get; set; } = 0;
 
-    public GameCreatures(int creatureCount)
+    public GameCreatures(Player player)
     {
-        CreatureCount = creatureCount;
-    }
-
-    public void Add(int id, int color, int creatureType)
-    {
-        Creatures.Add(new Creature
+        var creatureCount = Util.GetNumericValue();
+        for (int i = 0; i < creatureCount; i++)
         {
-            Id = id,
-            Color = color,
-            CreatureType = creatureType
-        });
+            var data = Util.GetNumericValues();
+            Creatures.Add(new Creature { Id = data[0], Color = data[1], CreatureType = data[2] });
+        }
+
+        player.AvailableCreatures.AddRange(Creatures);
     }
 
-    public void UpdateRadar(int id, string radar)
+    public void UpdateVisibleCreatures()
     {
-        Creature creature = Creatures.Find(x => x.Id == id);
-        creature.UpdateRadar(radar);
-    }
-
-    public void UpdateLocVel(int id, int x, int y, int vx, int vy)
-    {
-        Creature creature = Creatures.Find(x => x.Id == id);
-        creature.UpdateLocVel(x, y, vx, vy);
+        var visibleCreatureCount = Util.GetNumericValue();
+        for (int i = 0; i < visibleCreatureCount; i++)
+        {
+            var data = Util.GetNumericValues();
+            Creature creature = CreatureById(data[0]);
+            creature.UpdateCreature(data[1], data[2], data[3], data[4]);
+        }
     }
 
     public Creature CreatureById(int Id)
