@@ -3,7 +3,6 @@
     public int Id { get; set; } = 0;
     public int Color { get; set; } = 0;
     public int CreatureType { get; set; } = 0;
-    public string RadarPosition { get; set; } = string.Empty;
     public int X { get; set; } = 0; // Actual
     public int Y { get; set; } = 0;
     public int Vx { get; set; } = 0; // Velocity
@@ -11,11 +10,6 @@
 
     public int Nx { get; set; } = 0; // Next
     public int Ny { get; set; } = 0;
-
-    public void UpdateRadarPosition(string radarPostion)
-    {
-        RadarPosition = radarPostion;
-    }
 
     public void UpdateCreature(int x, int y, int vx, int vy)
     {

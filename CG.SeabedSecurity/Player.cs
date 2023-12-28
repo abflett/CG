@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 public class Player : Character
 {
@@ -22,6 +23,20 @@ public class Player : Character
                     DroneScannedCreatures.Add(foundCreature);
                     AvailableCreatures.Remove(foundCreature);
                 }
+            }
+        }
+    }
+
+    public void UpdateRadarInfo()
+    {
+        var radarBlipCount = Util.GetNumericValue();
+        for (int i = 0; i < radarBlipCount; i++)
+        {
+            var data = (Console.ReadLine().Split(' '));
+            var playerDrone = Drones.FirstOrDefault(x => x.Id == int.Parse(data[0]));
+            if (playerDrone != null)
+            {
+                playerDrone.UpsertRadar(int.Parse(data[0]), int.Parse(data[1]), data[2]);
             }
         }
     }

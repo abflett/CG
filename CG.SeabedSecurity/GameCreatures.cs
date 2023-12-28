@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class GameCreatures
 {
@@ -31,16 +30,5 @@ public class GameCreatures
     public Creature CreatureById(int Id)
     {
         return Creatures.Find(x => x.Id == Id);
-    }
-
-    public void UpdateRadarInfo()
-    {
-        var radarBlipCount = Util.GetNumericValue();
-        for (int i = 0; i < radarBlipCount; i++)
-        {
-            var data = (Console.ReadLine().Split(' '));
-            var foundCreature = CreatureById(int.Parse(data[1]));
-            foundCreature.UpdateRadarPosition(data[2]);
-        }
     }
 }

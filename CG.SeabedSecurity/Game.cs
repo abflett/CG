@@ -24,7 +24,7 @@
 
             _player.UpsertDroneScannedCreatures(_gameCreatures); // drone scanned but not scanned data
             _gameCreatures.UpdateVisibleCreatures(); // Only in light range, powered vs not
-            _gameCreatures.UpdateRadarInfo();
+            _player.UpdateRadarInfo();
             _player.Update();
         }
     }
