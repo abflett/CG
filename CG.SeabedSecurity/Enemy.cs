@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-public class Player
+public class Enemy
 {
     private int _droneCount = 0;
     public int Score { get; set; } = 0;
     public List<Drone> Drones { get; set; } = new List<Drone>();
     public List<Creature> ScannedCreatures { get; set; } = new List<Creature>();
-    public List<Creature> AvailableCreatures { get; set; } = new List<Creature>();
 
     public void UpdateScore()
     {
@@ -22,7 +21,6 @@ public class Player
             if (foundScannedCreature == null)
             {
                 ScannedCreatures.Add(foundCreature);
-                AvailableCreatures.Remove(foundCreature);
             }
         }
     }
@@ -52,14 +50,6 @@ public class Player
                 drone.Emergency = data[3];
                 drone.Battery = data[4];
             }
-        }
-    }
-
-    public void Update()
-    {
-        for (int i = 0; i < _droneCount; i++)
-        {
-            Drones[i].Action(AvailableCreatures);
         }
     }
 }

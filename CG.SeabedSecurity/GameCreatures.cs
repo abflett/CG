@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class GameCreatures
 {
     public List<Creature> Creatures { get; set; } = new List<Creature>();
 
-    public GameCreatures()
+    public GameCreatures(Player player)
     {
         var creatureCount = Util.GetNumericValue();
         for (int i = 0; i < creatureCount; i++)
@@ -12,6 +13,8 @@ public class GameCreatures
             var data = Util.GetNumericValues();
             Creatures.Add(new Creature { Id = data[0], Color = data[1], CreatureType = data[2] });
         }
+
+        player.AvailableCreatures.AddRange(Creatures);
     }
 
     public void UpdateVisibleCreatures()
@@ -20,13 +23,24 @@ public class GameCreatures
         for (int i = 0; i < visibleCreatureCount; i++)
         {
             var data = Util.GetNumericValues();
-            Creature creature = Creatures.Find(x => x.Id == data[0]);
-            creature.UpdateCreature(data[1], data[2], data[3], data[4]); // update creature: x, y, vx, vy
+            Creature creature = CreatureById(data[0]);
+            creature.UpdateCreature(data[1], data[2], data[3], data[4]);
         }
     }
 
     public Creature CreatureById(int Id)
     {
         return Creatures.Find(x => x.Id == Id);
+    }
+
+    public void UpdateRadarInfo()
+    {
+        var radarBlipCount = Util.GetNumericValue();
+        for (int i = 0; i < radarBlipCount; i++)
+        {
+            var data = (Console.ReadLine().Split(' '));
+            var foundCreature = CreatureById(int.Parse(data[1]));
+            foundCreature.UpdateRadarPosition(data[2]);
+        }
     }
 }
